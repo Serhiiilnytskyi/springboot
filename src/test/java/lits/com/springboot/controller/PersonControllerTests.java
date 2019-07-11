@@ -1,6 +1,7 @@
 package lits.com.springboot.controller;
 
 import lits.com.springboot.config.MockConfiguration;
+import lits.com.springboot.model.Person;
 import lits.com.springboot.model.User;
 import lits.com.springboot.repository.PersonRepository;
 import org.json.JSONObject;
@@ -14,44 +15,48 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes ={MockConfiguration.class})
 public class PersonControllerTests {
 
-//    private static final String SIGN_UP_URL = "/api/persons";
-//
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    @Autowired
-//    private PersonController userController;
-//
-//    @Autowired
-//    private PersonRepository personRepository;
-//
-//    @Test
-//    public void shouldSuccessUser() throws  Exception {
-//
-//
-//
-//        User user = new User();
-//        user.setEmail("someUser");
-//        user.setPassword("some pass");
-//
-//        //personRepository.save(user);
-//
-//        JSONObject userJson = new JSONObject(user);
-//        System.out.println();
-//        mockMvc.perform(post(SIGN_UP_URL)
-//                .accept("aplication/json")
-//                .contentType(MediaType.ALL)
-//                .content(userJson.toString()))
-//                .andDo(MockMvcResultHandlers.print()
-//                );
-//
-//    }
+    private static final String API_PERSONS = "/api/persons";
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private PersonController userController;
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Test
+    public void shouldSuccessPerson() throws  Exception {
+        Person person = new Person();
+        person.setName("somePerson");
+
+        JSONObject userJson = new JSONObject(person);
+
+        mockMvc.perform(post(API_PERSONS)
+                .accept("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(person.toString()))
+                .andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void givenPersonWithQueryParameterId_whenMockMVC_thenResponseOK() throws Exception {
+        this.mockMvc.perform(get(API_PERSONS)
+                .param("id", "1")).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.name").value("somePerson"));
+    }
 
 }

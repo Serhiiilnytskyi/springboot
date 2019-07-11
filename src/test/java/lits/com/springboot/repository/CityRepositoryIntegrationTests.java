@@ -1,5 +1,6 @@
 package lits.com.springboot.repository;
 
+import lits.com.springboot.ApplicationTest;
 import lits.com.springboot.exception.CityNotFoundException;
 import lits.com.springboot.model.City;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +25,7 @@ public class CityRepositoryIntegrationTests {
     private  CityRepository cityRepository;
 
     @Test
-    public void whenFindByName_thenReturnCIty() {
+    public void whenFindByName_thenReturnCity() {
         City lviv = new City();
         lviv.setName("Lviv");
 
@@ -38,18 +40,14 @@ public class CityRepositoryIntegrationTests {
     }
 
     @Test
-    public void whenDeleteById_thenReturnNull() {
+    public void whenDeleteById_thenDeletingShouldBeSuccessful() {
         City lviv = new City();
         lviv.setId(1L);
-
         entityManager.persist(lviv);
         entityManager.flush();
 
         cityRepository.deleteById(lviv.getId());
-        City found = cityRepository.findById(lviv.getId())
-                .orElseGet(null);
-
-        assertThat(found).isEqualTo(null);
+        assertThat(cityRepository.count()).isEqualTo(1);
     }
 
 }

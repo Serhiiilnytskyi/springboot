@@ -22,20 +22,20 @@ import java.util.HashSet;
 @SpringBootApplication
 public class Application implements ApplicationRunner {
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
-
-	@Autowired
-	UserRepository userRepository;
-
-	@Autowired
-	RoleRepository roleRepository;
-
-	@Autowired
-	PetRepository petRepository;
-
-	@Autowired
-	PersonRepository personRepository;
+//	@Autowired
+//	PasswordEncoder passwordEncoder;
+//
+//	@Autowired
+//	UserRepository userRepository;
+//
+//	@Autowired
+//	RoleRepository roleRepository;
+//
+//	@Autowired
+//	PetRepository petRepository;
+//
+//	@Autowired
+//	PersonRepository personRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -43,18 +43,18 @@ public class Application implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		String email = "serhiiilnytskyi@gmail.com";
-		String password = passwordEncoder.encode("F,hfrflf,hf314");
-
-		Role role = new Role();
-				role.setName("ADMIN");
-				role.setDescription("Some admin role");
-
-		User user = User.builder()
-				.email(email)
-				.password(password)
-				.roles(new HashSet<Role>(){{add(role);}})
-				.build();
+//		String email = "serhiiilnytskyi@gmail.com";
+//		String password = passwordEncoder.encode("F,hfrflf,hf314");
+//
+//		Role role = new Role();
+//				role.setName("ADMIN");
+//				role.setDescription("Some admin role");
+//
+//		User user = User.builder()
+//				.email(email)
+//				.password(password)
+//				.roles(new HashSet<Role>(){{add(role);}})
+//				.build();
 
 		//roleRepository.save(role);
 		//userRepository.save(user);

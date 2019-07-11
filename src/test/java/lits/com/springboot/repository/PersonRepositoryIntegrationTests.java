@@ -1,7 +1,7 @@
 package lits.com.springboot.repository;
 
-import lits.com.springboot.exception.CityNotFoundException;
-import lits.com.springboot.model.City;
+import lits.com.springboot.exception.PersonNotFoundException;
+import lits.com.springboot.model.Person;
 import lits.com.springboot.model.Person;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,50 +15,42 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class PersonRepositoryIntegrationTests {
 
-//    @Autowired
-//    private TestEntityManager entityManager;
-//
-//    @Autowired
-//    private  PersonRepository personRepository;
-//
-//    @Test
-//    public void whenFindByName_thenReturnEmployee() {
-//        Person person1 = new Person();
-//        Person person2 = new Person();
-//        Person person3 = new Person();
-//
-//        person1.setName("John");
-//        person2.setName("Joel");
-//        person3.setName("Woodie");
-//        Person [] personArray = {person1, person2, person3};
-//        List<Person> persons = Arrays.asList(personArray);
-//        entityManager.persist(persons);
-//        entityManager.flush();
-//
-//        List<Person> found = personRepository.findAllByNameContains("Jo");
-//
-//        assertThat(found.getName())
-//                .isEqualTo(lviv.getName());
-//    }
-//
-//    @Test
-//    public void whenDeleteById_thenReturnNull() {
-//        City lviv = new City();
-//        lviv.setName("Lviv");
-//
-//        entityManager.persist(lviv);sitoryTest
-//        entityManager.flush();
-//
-//        City found = personRepository.findByName(lviv.getName())
-//                .orElseThrow(() -> new CityNotFoundException("City not found"));
-//
-//        assertThat(found.getName())
-//                .isEqualTo(lviv.getName());
-//    }
+    @Autowired
+    private TestEntityManager entityManager;
+
+    @Autowired
+    private  PersonRepository personRepository;
+
+    @Test
+    public void whenFindByName_thenReturnPerson() {
+        Person person = new Person();
+        person.setName("Lviv");
+        person.setAge(20);
+
+        entityManager.persist(person);
+        entityManager.flush();
+
+        List<Person> found = personRepository.findByNameAndAge(person.getName(), person.getAge());
+
+        assertThat(found.get(1).getName())
+                .isEqualTo(person.getName());
+        assertThat(found.get(1).getAge())
+                .isEqualTo(person.getAge());
+    }
+
+    @Test
+    public void whenDeleteById_thenDeletingShouldBeSuccessful() {
+        Person person = new Person();
+        person.setId(1L);
+        entityManager.persist(person);
+        entityManager.flush();
+
+        personRepository.deleteById(person.getId());
+        assertThat(personRepository.count()).isEqualTo(1);
+    }
 
 }

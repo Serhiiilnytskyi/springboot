@@ -1,7 +1,7 @@
 package lits.com.springboot.repository;
 
-import lits.com.springboot.exception.CityNotFoundException;
-import lits.com.springboot.model.City;
+import lits.com.springboot.exception.PetNotFoundException;
+import lits.com.springboot.model.Pet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,47 +9,43 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class PetRepositoryIntegrationTests {
 
-//    @Autowired
-//    private TestEntityManager entityManager;
-//
-//    @Autowired
-//    private  CityRepository cityRepository;
-//
-//    @Test
-//    public void whenFindByName_thenReturnEmployee() {
-//        City lviv = new City();
-//        lviv.setName("Lviv");
-//
-//        entityManager.persist(lviv);
-//        entityManager.flush();
-//
-//        City found = cityRepository.findByName(lviv.getName())
-//                .orElseThrow(() -> new CityNotFoundException("City not found"));
-//
-//        assertThat(found.getName())
-//                .isEqualTo(lviv.getName());
-//    }
-//
-//    @Test
-//    public void whenDeleteById_thenReturnNull() {
-//        City lviv = new City();
-//        lviv.setName("Lviv");
-//
-//        entityManager.persist(lviv);sitoryTest
-//        entityManager.flush();
-//
-//        City found = cityRepository.findByName(lviv.getName())
-//                .orElseThrow(() -> new CityNotFoundException("City not found"));
-//
-//        assertThat(found.getName())
-//                .isEqualTo(lviv.getName());
-//    }
+    @Autowired
+    private TestEntityManager entityManager;
+
+    @Autowired
+    private  PetRepository petRepository;
+
+    @Test
+    public void whenFindByName_thenReturnPet() {
+        Pet pet = new Pet();
+        pet.setName("Dog");
+
+        entityManager.persist(pet);
+        entityManager.flush();
+
+        List<Pet> found = petRepository.findByName(pet.getName());
+
+        assertThat(found.get(1).getName())
+                .isEqualTo(pet.getName());
+    }
+
+    @Test
+    public void whenDeleteById_thenDeletingShouldBeSuccessful() {
+        Pet pet = new Pet();
+        pet.setId("aasdfgnbawembvr");
+        entityManager.persist(pet);
+        entityManager.flush();
+
+        petRepository.deleteById(pet.getId());
+        assertThat(petRepository.count()).isEqualTo(0);
+    }
 
 }
